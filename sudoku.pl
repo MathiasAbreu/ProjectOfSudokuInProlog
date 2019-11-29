@@ -11,7 +11,7 @@ generate() :-
     nth1(1,Linhas,L),
     sudoku(Linhas),
     maplist(label, Linhas),
-    zeraCelulas(Linhas, 0, M),
+    remove_random_pieces(Linhas, 0, M),
     maplist(portray_clause, M).
 
 random_line(L) :-
@@ -27,16 +27,16 @@ replaceElementM(R, C, Mat, Val, Upd) :-
     nth1(C, NewRowUpd,Val,NewRow),	
     nth1(R, Upd, NewRowUpd, RestRows).
 
-zeraCelulas(MatrizJogadorCopiada,15,MatrizJogador):-
+remove_random_pieces(MatrizJogadorCopiada,15,MatrizJogador):-
 	MatrizJogador = MatrizJogadorCopiada.
 	
-zeraCelulas(MatrizJogadorCopiada,NumCelulasZeradas,MatrizJogador):-
+remove_random_pieces(MatrizJogadorCopiada,NumCelulasZeradas,MatrizJogador):-
 	random_between(1, 9, Row),
 	random_between(1, 9, Col),
 	index(MatrizJogadorCopiada_,Row,Col,Valor),
-	(Valor == 0 -> zeraCelulas(MatrizJogadorCopiada_,NumCelulasZeradas,MatrizJogador);
+	(Valor == 0 -> remove_random_pieces(MatrizJogadorCopiada_,NumCelulasZeradas,MatrizJogador);
 								replaceElementM(Row,Col,MatrizJogadorCopiada,_,MatrizJogadorCopiada_),NewNumCelulas is (NumCelulasZeradas + 1)
-								,zeraCelulas(MatrizJogadorCopiada_,NewNumCelulas,MatrizJogador)).
+								,remove_random_pieces(MatrizJogadorCopiada_,NewNumCelulas,MatrizJogador)).
 
 board(
     [[_,6,_,_,_,5,_,_,_],
