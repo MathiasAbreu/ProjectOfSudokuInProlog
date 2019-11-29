@@ -1,9 +1,34 @@
 :-use_module(library(clpfd)).
+:- initialization main.
+
+main() :-
+  iniciaMenu().
+
+iniciaMenu():-
+        writeln('\n*****************************'),
+        writeln('********** SUDOKU ***********'),
+        writeln('*****************************'),
+        opcoes().
+
+
+opcoes():-
+            writeln('1. Gerar Sudoku'              ),
+            writeln('2. Resolvedor de sudokus'     ),
+            writeln('3. Sair'                      ),
+            writeln('Escolha uma opçao (3 para sair): '),
+            read(Opcao),
+            escolheOpcao(Opcao),
+            iniciaMenu().
+
+escolheOpcao(1) :- generate().
+escolheOpcao(2) :- solve().
+escolheOpcao('3') :- true.
+escolheOpcao(_) :- write('Opçao invalida, tente novamente.').
 
 solve() :-
-    board(Linhas),
-    sudoku(Linhas),
-    maplist(portray_clause, Linhas).
+  board(Linhas),
+  sudoku(Linhas),
+  maplist(portray_clause, Linhas).
 
 generate() :-
     random_line(L),
@@ -22,14 +47,14 @@ index(Matrix, Row, Col, Value):-
   nth1(Col, MatrixRow, Value).
 
 replaceElementM(R, C, Mat, Val, Upd) :-
-    nth1(R, Mat, OldRow, RestRows),   
-    nth1(C, OldRow, _Val, NewRow),    
-    nth1(C, NewRowUpd,Val,NewRow),	
+    nth1(R, Mat, OldRow, RestRows),
+    nth1(C, OldRow, _Val, NewRow),
+    nth1(C, NewRowUpd,Val,NewRow),
     nth1(R, Upd, NewRowUpd, RestRows).
 
 remove_random_pieces(MatrizJogadorCopiada,15,MatrizJogador):-
 	MatrizJogador = MatrizJogadorCopiada.
-	
+
 remove_random_pieces(MatrizJogadorCopiada,NumCelulasZeradas,MatrizJogador):-
 	random_between(1, 9, Row),
 	random_between(1, 9, Col),
