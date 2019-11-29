@@ -1,19 +1,20 @@
-:- module('menu', [iniciaMenu/0]).
+:- module("menu").
 
 
-iniciaMenu() :-
+iniciaMenu():-
         clear(),
         writeln("*****************************"),
         writeln('********** SUDOKU ***********'),
         writeln('*****************************'),
-        opcoes.
+        opcoes(),
+        iniciaMenu().
 
 
-opcoes() :-
+opcoes():-
             writeln('1. Gerar Sudoku'              ),
             writeln('2. Resolvedor de sudokus'     ),
             writeln('3. Sair'                      ),
-            writeln('Escolha uma opçao (3 para sair): ') read(Opcao),
+            writeln('Escolha uma opçao (3 para sair): '),read(Opcao),
             escolheOpcao(Opcao).
 
 escolheOpcao(1) :- write('Metodo de gerar o sudoku').
@@ -30,8 +31,16 @@ escolheCoordenadas(SudokuGerado) :- mostrarSudoku(SudokuGerado),
 									read(Numero), nl,
 									verificaCoordenadas(SudokuGerado, Linha,Coluna,Numero).
 
-verificaCoordenadas(SudokuGerado ,Linha, Coluna, Numero) :- Linha == 0, Coluna == 0, verificaDesistencia (SudokuGerado,-1,-1, Numero);
+verificaCoordenadas(SudokuGerado ,Linha, Coluna, Numero) :- Linha == 0, Coluna == 0, verificaDesistencia(SudokuGerado,-1,-1, Numero);
 
 
-verificaDesistencia(Matriz (-1) (-1) Numero, Retorno) =  Retorno is backTrackingResolution(Matriz (0,0) 1).
-verificaDesistencia(Matriz, Linha, Coluna, Numero, Retorno) = Retorno is adicionaElementoPosicao Matriz (0,0) (Linha,Coluna) Numero)
+verificaDesistencia(Matriz,(-1), (-1), Numero, Retorno) =  Retorno is backTrackingResolution(Matriz,(0,0),1).
+verificaDesistencia(Matriz, Linha, Coluna, Numero, Retorno) = Retorno is adicionaElementoPosicao(Matriz,(0,0),(Linha,Coluna),Numero)
+
+mostrarSudoku([Head|[]]):- mostrarLinha(Head).
+mostrarSudoku([Head|Tail]):- mostrarLinha(Head),mostrarSudoku(Tail).
+
+mostrarDivisoria():- writeln("--------------------------------------------").
+mostrarLinha([Head|[]]):- writeln(" | " + Head + " |").
+mostrarLinha([Head|Tail]):-
+  write(" | " + Head),mostrarLinha(Tail).
